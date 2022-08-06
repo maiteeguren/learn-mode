@@ -6,8 +6,9 @@
   align-items: center;
 }
 
-.question-modal {
+.modal {
   width: 50%;
+  text-align: center;
 }
 
 .error {

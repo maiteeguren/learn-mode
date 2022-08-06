@@ -15,20 +15,18 @@ function App() {
   const [finished, setFinished] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
 
-  const getCorrectAnswers = (questionId: number): boolean => {
-    return answersBundle.filter(answer => answer.questionId === questionId && answer.isCorrect).length >= 2
-  }
-  
-  const learnModeAlgorithm = (): number => {
-    const remainingQuestions = BUNDLE_QUESTIONS.filter(question => !getCorrectAnswers(question.id))
+
+  const learnModeAlgorithm = (bundle: QuestionResponse[]): number => {
+    const remainingQuestions = BUNDLE_QUESTIONS.filter(question => {
+      return bundle.filter(answer => answer.questionId === question.id && answer.isCorrect).length < 2
+    })
 
     if (remainingQuestions.length === 0) {
       setFinished(true)
       return 0
-    } else {
-      const randomIndex = Math.floor(Math.random() * remainingQuestions.length)
-      return remainingQuestions[randomIndex].id
     }
+    const randomIndex = Math.floor(Math.random() * remainingQuestions.length)
+    return remainingQuestions[randomIndex].id
   }
 
   const validateAnswer = (answer: string): boolean => {
@@ -47,13 +45,11 @@ function App() {
         isCorrect
       }
 
-      setAnswersBundle([...answersBundle, answer])
+      const newAnswersBundle = [...answersBundle, answer]
+      setAnswersBundle(newAnswersBundle)
 
       if (isCorrect) {
-        const nextId = learnModeAlgorithm()
-        console.log('nextId', nextId)
-        setCurrentQuestionId(nextId)
-        setShowAnswer(false)
+        displayNextQuestion(newAnswersBundle)
         e.target.value = ''
       } else {
         setError(true)
@@ -62,22 +58,20 @@ function App() {
     }
   }
 
-  const handleStart = (): void => {
-    const randomIndex = Math.floor(Math.random() * BUNDLE_QUESTIONS.length)
-    setCurrentQuestionId(BUNDLE_QUESTIONS[randomIndex].id)
-    if (start) return
-    setStart(true)
-    setFinished(false)
+  const displayNextQuestion = (bundle = answersBundle) => {
+    const nextId = learnModeAlgorithm(bundle)
+    setCurrentQuestionId(nextId)
+    setShowAnswer(false)
   }
 
   return (
     <div className="App">
-      <header className={`question-modal ${start ? 'close' : ''}`} style={{ textAlign: 'center' }}>
+      <header className={`modal ${start ? 'close' : ''}`}>
         <h1>Welcome to Learn Mode</h1>
         <p>A study session in learn mode is considered complete when a student has answered each question correctly at least twice.</p>
-        <Button variant={'contained'} color={'primary'} onClick={handleStart} style={{ marginTop: 50 }}>Get Started</Button>
+        <Button variant={'contained'} color={'primary'} onClick={() => {displayNextQuestion(); setStart(true)}} style={{ marginTop: 50 }}>Get Started</Button>
       </header>
-      <div className={`question-modal ${(start && !finished) ? '' : 'close'}`}>
+      <div className={`modal ${(start && !finished) ? '' : 'close'}`}>
         <Form
           label={currentQuestion?.text}
           currentQuestion={currentQuestion}
@@ -85,10 +79,10 @@ function App() {
           className={`${error ? 'error' : ''}`}
           showAnswer={showAnswer}
           onSetShowAnswer={setShowAnswer}
-          onSkip={handleStart}
+          onSkip={displayNextQuestion}
         />
       </div>
-      <div className={`question-modal ${finished ? '' : 'close'}`} style={{ textAlign: 'center' }}>
+      <div className={`modal ${finished ? '' : 'close'}`}>
         <h2>Congratulations!</h2>
         <p>You have completed your study session</p>
       </div>

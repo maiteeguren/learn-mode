@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, TextField} from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import { FormProps } from '../../index.types'
 
 function Form({ label, currentQuestion, onKeyDown, className, onSkip, showAnswer, onSetShowAnswer }: FormProps) {

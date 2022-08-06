@@ -18,3 +18,4 @@ export interface FormProps {
   onSkip: () => void,
   showAnswer: boolean,
   onSetShowAnswer: React.Dispatch<React.SetStateAction<boolean>>
+}
