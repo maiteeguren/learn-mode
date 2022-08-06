@@ -4,7 +4,7 @@ export interface QuestionResponse {
   isCorrect: boolean;
 }
 
-interface Question {
+export interface Question {
   id: string;
   text: string;
   answer: string;
@@ -13,9 +13,8 @@ interface Question {
 export interface FormProps {
   label: string,
   currentQuestion: Question,
-  onKeyDown: () => void,
+  onKeyDown: (e: any) => void,
   className: string,
   onSkip: () => void,
   showAnswer: boolean,
-  onSetShowAnswer: () => void
-}
+  onSetShowAnswer: (): boolean => void
