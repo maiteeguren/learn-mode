@@ -7,7 +7,7 @@ import Form from '../Form/index'
 
 function App() {
   const [currentQuestionId, setCurrentQuestionId] = useState(1)
-  const currentQuestion: Question = BUNDLE_QUESTIONS.find(question => question.id === currentQuestionId)
+  const currentQuestion: Question = BUNDLE_QUESTIONS.find(question => question.id === currentQuestionId) || BUNDLE_QUESTIONS[0]
 
   const [answersBundle, setAnswersBundle] = useState<QuestionResponse[]>([])
   const [start, setStart] = useState(false)
@@ -21,11 +21,12 @@ function App() {
   
   const learnModeAlgorithm = (): number => {
     const remainingQuestions = BUNDLE_QUESTIONS.filter(question => !getCorrectAnswers(question.id))
-    const randomIndex = Math.floor(Math.random() * remainingQuestions.length)
+
     if (remainingQuestions.length === 0) {
       setFinished(true)
       return 0
     } else {
+      const randomIndex = Math.floor(Math.random() * remainingQuestions.length)
       return remainingQuestions[randomIndex].id
     }
   }
@@ -37,9 +38,8 @@ function App() {
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    const target = e.target as HTMLInputElement
     if (e.key === 'Enter') {
-      const isCorrect = validateAnswer(target.value)
+      const isCorrect = validateAnswer(e.target.value)
 
       const answer: QuestionResponse = {
         id: answersBundle.length,
@@ -79,7 +79,7 @@ function App() {
       </header>
       <div className={`question-modal ${(start && !finished) ? '' : 'close'}`}>
         <Form
-          label={currentQuestion?.text || ''}
+          label={currentQuestion?.text}
           currentQuestion={currentQuestion}
           onKeyDown={(e) => handleKeyDown(e)}
           className={`${error ? 'error' : ''}`}
@@ -88,12 +88,10 @@ function App() {
           onSkip={handleStart}
         />
       </div>
-      {finished && (
-        <div className={`question-modal`} style={{ textAlign: 'center' }}>
-          <h2>Congratulations!</h2>
-          <p>You have completed your study session</p>
-        </div>
-      )}
+      <div className={`question-modal ${finished ? '' : 'close'}`} style={{ textAlign: 'center' }}>
+        <h2>Congratulations!</h2>
+        <p>You have completed your study session</p>
+      </div>
     </div>
   );
 }

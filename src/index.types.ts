@@ -5,7 +5,7 @@ export interface QuestionResponse {
 }
 
 export interface Question {
-  id: string;
+  id: number;
   text: string;
   answer: string;
 }
@@ -17,4 +17,4 @@ export interface FormProps {
   className: string,
   onSkip: () => void,
   showAnswer: boolean,
-  onSetShowAnswer: (): boolean => void
+  onSetShowAnswer: React.Dispatch<React.SetStateAction<boolean>>
