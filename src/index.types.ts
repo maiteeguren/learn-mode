@@ -13,9 +13,9 @@ export interface Question {
 export interface FormProps {
   label: string,
   currentQuestion: Question,
-  onKeyDown: (e: any) => void,
-  className: string,
   onSkip: () => void,
   showAnswer: boolean,
-  onSetShowAnswer: React.Dispatch<React.SetStateAction<boolean>>
+  onSetShowAnswer: React.Dispatch<React.SetStateAction<boolean>>,
+  onSetAnswersBundle: React.Dispatch<React.SetStateAction<QuestionResponse[]>>,
+  answersBundle: QuestionResponse[]
 }
