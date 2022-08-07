@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import './index.css';
 import { BUNDLE_QUESTIONS } from '../../constants'
 import { Button } from '@material-ui/core';
 import { QuestionResponse, Question } from '../../index.types'
@@ -57,7 +57,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className={`modal ${start ? 'close' : ''}`}>
+      <header className={`modal text-center ${start ? 'close' : ''}`}>
         <h1>Welcome to Learn Mode</h1>
         <p>A study session in learn mode is considered complete when a student has answered each question correctly at least twice.</p>
         <Button variant={'contained'} color={'primary'} onClick={() => {displayNextQuestion(); setStart(true)}} style={{ marginTop: 50 }}>Get Started</Button>
@@ -73,7 +73,7 @@ function App() {
           answersBundle={answersBundle}
         />
       </div>
-      <div className={`modal ${finished ? '' : 'close'}`}>
+      <div className={`modal text-center ${finished ? '' : 'close'}`}>
         <h2>Congratulations!</h2>
         <p>You have completed your study session</p>
       </div>
